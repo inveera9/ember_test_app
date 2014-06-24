@@ -14,8 +14,9 @@
           "user[password]": route.currentModel.password
         },
         success: function(data) {
-          log.log("Login Msg " + data.user.dummy_msg);
+          // log.log("Login Msg " + data.user.dummy_msg);
           me.set('currentUser', data.user);
+           //window.location.href="/#/home"
           return route.transitionTo('home');
         },
         error: function(jqXHR, textStatus, errorThrown) {

@@ -16,8 +16,7 @@ class ApplicationController < ActionController::Base
       user["id"]=current_user.id
       user["email"]=current_user.email
       user["role"]=current_user.roles.first.name
-      p "***************************************"
-      p user
+
      user.to_json
     else
       {}.to_json

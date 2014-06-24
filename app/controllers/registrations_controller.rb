@@ -3,30 +3,31 @@ class RegistrationsController < Devise::RegistrationsController
     super
   end
 
-  def create
 
-    build_resource(sign_up_params)
-    
-    resource_saved = resource.save
-    resource.before_add_method(params[:role])
-    yield resource if block_given?
-    if resource_saved
-      if resource.active_for_authentication?
-        set_flash_message :notice, :signed_up if is_flashing_format?
-        sign_up(resource_name, resource)
-        respond_with resource, location: after_sign_up_path_for(resource)
-      else
-        set_flash_message :notice, :"signed_up_but_#{resource.inactive_message}" if is_flashing_format?
-        expire_data_after_sign_in!
-        respond_with resource, location: after_inactive_sign_up_path_for(resource)
-      end
+    def create
+    @user = User.new(user_params)
+    if @user.save
+      @user.before_add_method(params[:role])
+      sign_up(resource_name, @user)
+      # warden.authenticate!(:scope =>resource_name, :recall => "#{controller_path}#new")
+      user = Hash.new()
+      user["email"]=  params[:user][:email]
+      user["password"] = params[:user][:password]
+       user["role"]=current_user.roles.first.name
+      # render :json=> {:s=> "success"},:status=>201
+      render :json=>  {:s=> "failure", :user=> user},:status=>201
     else
-      clean_up_passwords resource
-      respond_with resource
+      render :json=>  {:s=> "failure"},:status=>201
     end
   end
-
+ 
   def update
     super
+  end
+  private
+
+  def user_params
+    params.require(:user).permit(:email, :password, :password_confirmation
+    )
   end
 end 
