@@ -1,0 +1,21 @@
+<h2>Posts</h2>
+
+<table class="table table-bordered table-hover">
+<tr>
+<th>Title</th>
+<th>Body</th>
+<th>View</th>
+</tr>
+
+{{#each post in model }}
+<tr>
+<td>{{post.title}}</td>
+<td>{{post.body}}</td>
+<td>{{#link-to 'post' post class="btn btn-primary"}}view{{/link-to}}</td>
+</tr>
+{{/each}}
+
+
+{{#if check_role}}
+	<p>{{#link-to 'new_post' }}New Post{{/link-to}}</p>
+{{/if}}
